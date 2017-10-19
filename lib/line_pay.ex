@@ -9,7 +9,7 @@ defmodule LinePay do
 
   @default_httpoison_options [
     timeout: 30000,
-    recv_timeout: 80000,
+    recv_timeout: 80000
   ]
 
   defmodule MissingChannelIdError do
@@ -59,13 +59,13 @@ defmodule LinePay do
   end
 
   defp sandbox? do
-    case Application.get_env(:ex_line_pay, :sandbox, System.get_env "LINE_PAY_SANDBOX") do
-      "true"  -> true
+    case Application.get_env(:ex_line_pay, :sandbox, System.get_env("LINE_PAY_SANDBOX")) do
+      "true" -> true
       "false" -> false
-      true    -> true
-      false   -> false
-      nil     -> false
-      _       -> false
+      true -> true
+      false -> false
+      nil -> false
+      _ -> false
     end
   end
 
@@ -73,11 +73,11 @@ defmodule LinePay do
   Set our request headers for every request.
   """
   def req_headers(channel_id, key) do
-    Map.new
-      |> Map.put("X-LINE-ChannelId", "#{channel_id}")
-      |> Map.put("X-LINE-ChannelSecret", "#{key}")
-      |> Map.put("User-Agent",    "LinePay/v2 ex_line_pay/0.1.0")
-      |> Map.put("Content-Type",  "application/json")
+    Map.new()
+    |> Map.put("X-LINE-ChannelId", "#{channel_id}")
+    |> Map.put("X-LINE-ChannelSecret", "#{key}")
+    |> Map.put("User-Agent", "LinePay/v2 ex_line_pay/0.1.0")
+    |> Map.put("Content-Type", "application/json")
   end
 
   @doc """
@@ -87,7 +87,7 @@ defmodule LinePay do
   Returns Record or ArgumentError
   """
   def process_response_body(body) do
-    Poison.decode! body
+    Poison.decode!(body)
   end
 
   @doc """
@@ -101,16 +101,29 @@ defmodule LinePay do
     * options - request options
   Returns tuple
   """
-  def make_request_with_key(method, endpoint, channel_id, key, body \\ %{}, headers \\ %{}, options \\ []) do
-    rb = body |> Poison.encode!
-    rh = req_headers(channel_id, key)
-        |> Map.merge(headers)
-        |> Map.to_list
+  def make_request_with_key(
+        method,
+        endpoint,
+        channel_id,
+        key,
+        body \\ %{},
+        headers \\ %{},
+        options \\ []
+      ) do
+    rb = body |> Poison.encode!()
+
+    rh =
+      req_headers(channel_id, key)
+      |> Map.merge(headers)
+      |> Map.to_list()
 
     options = Keyword.merge(httpoison_request_options(), options)
-    {:ok, response} = retry with: exp_backoff() |> randomize() |> expiry(60_000) do
-      request(method, endpoint, rb, rh, options)
-    end
+
+    {:ok, response} =
+      retry with: exp_backoff() |> randomize() |> expiry(60_000) do
+        request(method, endpoint, rb, rh, options)
+      end
+
     response.body
   end
 
@@ -126,22 +139,39 @@ defmodule LinePay do
   Returns tuple
   """
   def make_request(method, endpoint, body \\ %{}, headers \\ %{}, options \\ []) do
-    make_request_with_key( method, endpoint, config_or_env_channel_id(), config_or_env_key(), body, headers, options )
+    make_request_with_key(
+      method,
+      endpoint,
+      config_or_env_channel_id(),
+      config_or_env_key(),
+      body,
+      headers,
+      options
+    )
   end
 
   defp require_line_pay_key do
-    case Application.get_env(:line_pay, :channel_secret_key, System.get_env "LINE_PAY_CHANNEL_SECRET_KEY") || :not_found do
+    case Application.get_env(
+           :line_pay,
+           :channel_secret_key,
+           System.get_env("LINE_PAY_CHANNEL_SECRET_KEY")
+         ) || :not_found do
       :not_found ->
         raise MissingSecretKeyError
-      value -> value
+
+      value ->
+        value
     end
   end
 
   defp require_line_pay_channel_id do
-    case Application.get_env(:line_pay, :channel_id, System.get_env "LINE_PAY_CHANNEL_ID") || :not_found do
+    case Application.get_env(:line_pay, :channel_id, System.get_env("LINE_PAY_CHANNEL_ID")) ||
+           :not_found do
       :not_found ->
         raise MissingChannelIdError
-      value -> value
+
+      value ->
+        value
     end
   end
 
