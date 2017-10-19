@@ -6,14 +6,14 @@ defmodule ExLinePay.Mixfile do
       app: :ex_line_pay,
       version: "0.1.0",
       elixir: "~> 1.5",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
       package: package(),
-      build_embedded: Mix.env == :prod,
+      build_embedded: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        "coveralls": :test,
+        coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
@@ -21,7 +21,7 @@ defmodule ExLinePay.Mixfile do
         "vcr.delete": :test,
         "vcr.check": :test,
         "vcr.show": :test
-      ],
+      ]
     ]
   end
 
@@ -35,7 +35,7 @@ defmodule ExLinePay.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, ">= 0.0.0" },
+      {:httpoison, ">= 0.0.0"},
       {:poison, ">= 0.0.0", optional: true},
       {:retry, ">= 0.0.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
@@ -44,7 +44,7 @@ defmodule ExLinePay.Mixfile do
       {:exvcr, ">= 0.0.0", only: [:test, :dev]},
       {:mock, ">= 0.0.0", only: :test},
       {:inch_ex, ">= 0.0.0", only: [:dev, :test]},
-      {:cortex, "~> 0.1", only: [:dev, :test]},
+      {:cortex, "~> 0.1", only: [:dev, :test]}
     ]
   end
 
