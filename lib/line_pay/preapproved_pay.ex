@@ -20,7 +20,7 @@ defmodule LinePay.PreapprovedPay do
 
   """
   def create(reg_key, params \\ %{}) do
-    create LinePay.config_or_env_channel_id, LinePay.config_or_env_key, reg_key, params
+    create(LinePay.config_or_env_channel_id(), LinePay.config_or_env_key(), reg_key, params)
   end
 
   @doc """
@@ -37,8 +37,14 @@ defmodule LinePay.PreapprovedPay do
 
   """
   def create(channel_id, key, reg_key, params) do
-    LinePay.make_request_with_key(:post, "#{@endpoint}/#{reg_key}/payment", channel_id, key, params)
-    |> LinePay.Util.handle_line_pay_response
+    LinePay.make_request_with_key(
+      :post,
+      "#{@endpoint}/#{reg_key}/payment",
+      channel_id,
+      key,
+      params
+    )
+    |> LinePay.Util.handle_line_pay_response()
   end
 
   @doc """
@@ -55,7 +61,7 @@ defmodule LinePay.PreapprovedPay do
 
   """
   def check(reg_key, params \\ []) do
-    check LinePay.config_or_env_channel_id, LinePay.config_or_env_key, reg_key, params
+    check(LinePay.config_or_env_channel_id(), LinePay.config_or_env_key(), reg_key, params)
   end
 
   @doc """
@@ -72,8 +78,16 @@ defmodule LinePay.PreapprovedPay do
 
   """
   def check(channel_id, key, reg_key, params) do
-    LinePay.make_request_with_key(:get, "#{@endpoint}/#{reg_key}/check", channel_id, key, %{}, %{}, params: params)
-    |> LinePay.Util.handle_line_pay_response
+    LinePay.make_request_with_key(
+      :get,
+      "#{@endpoint}/#{reg_key}/check",
+      channel_id,
+      key,
+      %{},
+      %{},
+      params: params
+    )
+    |> LinePay.Util.handle_line_pay_response()
   end
 
   @doc """
@@ -89,7 +103,7 @@ defmodule LinePay.PreapprovedPay do
 
   """
   def expire(reg_key) do
-    expire LinePay.config_or_env_channel_id, LinePay.config_or_env_key, reg_key
+    expire(LinePay.config_or_env_channel_id(), LinePay.config_or_env_key(), reg_key)
   end
 
   @doc """
@@ -106,6 +120,6 @@ defmodule LinePay.PreapprovedPay do
   """
   def expire(channel_id, key, reg_key) do
     LinePay.make_request_with_key(:post, "#{@endpoint}/#{reg_key}/expire", channel_id, key)
-    |> LinePay.Util.handle_line_pay_response
+    |> LinePay.Util.handle_line_pay_response()
   end
 end
