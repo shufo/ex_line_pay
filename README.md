@@ -26,7 +26,7 @@ export LINE_PAY_CHANNEL_SECRET_KEY=your_channel_secret_key
 `config.exs`
 
 ```elixir
-config :line_pay, channel_id: "1234567890",
+config :ex_line_pay, channel_id: "1234567890",
                   channel_secret_key: "your_channel_secret_key"
 ```
 
@@ -35,13 +35,13 @@ config :line_pay, channel_id: "1234567890",
 `dev.exs`
 
 ```elixir
-config :line_pay, sandbox: true
+config :ex_line_pay, sandbox: true
 ```
 
 `prod.exs`
 
 ```elixir
-config :line_pay, sandbox: false
+config :ex_line_pay, sandbox: false
 ```
 
 ### Payment
