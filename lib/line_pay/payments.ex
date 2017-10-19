@@ -17,7 +17,7 @@ defmodule LinePay.Payments do
 
   """
   def get(params \\ []) do
-    get LinePay.config_or_env_channel_id, LinePay.config_or_env_key, params
+    get(LinePay.config_or_env_channel_id(), LinePay.config_or_env_key(), params)
   end
 
   @doc """
@@ -32,9 +32,8 @@ defmodule LinePay.Payments do
   """
   def get(channel_id, key, params) do
     LinePay.make_request_with_key(:get, "#{@endpoint}", channel_id, key, %{}, %{}, params: params)
-    |> LinePay.Util.handle_line_pay_response
+    |> LinePay.Util.handle_line_pay_response()
   end
-
 
   @doc """
   Reserve a payment.
@@ -49,7 +48,7 @@ defmodule LinePay.Payments do
 
   """
   def reserve(params) do
-    reserve LinePay.config_or_env_channel_id, LinePay.config_or_env_key, params
+    reserve(LinePay.config_or_env_channel_id(), LinePay.config_or_env_key(), params)
   end
 
   @doc """
@@ -66,7 +65,7 @@ defmodule LinePay.Payments do
   """
   def reserve(channel_id, key, params) do
     LinePay.make_request_with_key(:post, "#{@endpoint}/request", channel_id, key, params)
-    |> LinePay.Util.handle_line_pay_response
+    |> LinePay.Util.handle_line_pay_response()
   end
 
   @doc """
@@ -82,7 +81,12 @@ defmodule LinePay.Payments do
 
   """
   def confirm(transaction_id, params) do
-    confirm LinePay.config_or_env_channel_id, LinePay.config_or_env_key, transaction_id, params
+    confirm(
+      LinePay.config_or_env_channel_id(),
+      LinePay.config_or_env_key(),
+      transaction_id,
+      params
+    )
   end
 
   @doc """
@@ -98,8 +102,14 @@ defmodule LinePay.Payments do
 
   """
   def confirm(channel_id, key, transaction_id, params) do
-    LinePay.make_request_with_key(:post, "#{@endpoint}/#{transaction_id}/confirm", channel_id, key, params)
-    |> LinePay.Util.handle_line_pay_response
+    LinePay.make_request_with_key(
+      :post,
+      "#{@endpoint}/#{transaction_id}/confirm",
+      channel_id,
+      key,
+      params
+    )
+    |> LinePay.Util.handle_line_pay_response()
   end
 
   @doc """
@@ -115,7 +125,7 @@ defmodule LinePay.Payments do
 
   """
   def void(transaction_id) do
-    void LinePay.config_or_env_channel_id, LinePay.config_or_env_key, transaction_id
+    void(LinePay.config_or_env_channel_id(), LinePay.config_or_env_key(), transaction_id)
   end
 
   @doc """
@@ -131,8 +141,13 @@ defmodule LinePay.Payments do
 
   """
   def void(channel_id, key, transaction_id) do
-    LinePay.make_request_with_key(:post, "#{@endpoint}/authorizations/#{transaction_id}/void", channel_id, key)
-    |> LinePay.Util.handle_line_pay_response
+    LinePay.make_request_with_key(
+      :post,
+      "#{@endpoint}/authorizations/#{transaction_id}/void",
+      channel_id,
+      key
+    )
+    |> LinePay.Util.handle_line_pay_response()
   end
 
   @doc """
@@ -149,7 +164,12 @@ defmodule LinePay.Payments do
 
   """
   def refund(transaction_id, params \\ %{}) do
-    refund LinePay.config_or_env_channel_id, LinePay.config_or_env_key, transaction_id, params
+    refund(
+      LinePay.config_or_env_channel_id(),
+      LinePay.config_or_env_key(),
+      transaction_id,
+      params
+    )
   end
 
   @doc """
@@ -166,8 +186,14 @@ defmodule LinePay.Payments do
 
   """
   def refund(channel_id, key, transaction_id, params) do
-    LinePay.make_request_with_key(:post, "#{@endpoint}/#{transaction_id}/refund", channel_id, key, params)
-    |> LinePay.Util.handle_line_pay_response
+    LinePay.make_request_with_key(
+      :post,
+      "#{@endpoint}/#{transaction_id}/refund",
+      channel_id,
+      key,
+      params
+    )
+    |> LinePay.Util.handle_line_pay_response()
   end
 
   @doc """
@@ -183,7 +209,12 @@ defmodule LinePay.Payments do
 
   """
   def capture(transaction_id, params \\ %{}) do
-    capture LinePay.config_or_env_channel_id, LinePay.config_or_env_key, transaction_id, params
+    capture(
+      LinePay.config_or_env_channel_id(),
+      LinePay.config_or_env_key(),
+      transaction_id,
+      params
+    )
   end
 
   @doc """
@@ -199,7 +230,13 @@ defmodule LinePay.Payments do
 
   """
   def capture(channel_id, key, transaction_id, params) do
-    LinePay.make_request_with_key(:post, "#{@endpoint}/authorizations/#{transaction_id}/capture", channel_id, key, params)
-    |> LinePay.Util.handle_line_pay_response
+    LinePay.make_request_with_key(
+      :post,
+      "#{@endpoint}/authorizations/#{transaction_id}/capture",
+      channel_id,
+      key,
+      params
+    )
+    |> LinePay.Util.handle_line_pay_response()
   end
 end
